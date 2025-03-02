@@ -1,0 +1,50 @@
+{% extends "vector_search/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Summarization Dashboard</h2>
+
+    <!-- Submit Summary Form -->
+    <form id="summaryForm">
+        <input type="hidden" id="csrf_token" value="{{ csrf_token }}">
+        <textarea id="text" class="w-full p-3 border rounded-lg" rows="4" placeholder="Enter text to summarize" required></textarea>
+        <input type="text" id="category" class="w-full p-3 border rounded-lg mt-2" placeholder="Enter category (optional)">
+        <button type="submit" class="w-full bg-blue-500 text-white py-2 mt-4 rounded-lg hover:bg-blue-700">
+            Summarize
+        </button>
+    </form>
+
+    <!-- Search Summaries -->
+    <h3 class="text-xl font-semibold mt-6">🔍 Search Summaries</h3>
+    <form id="searchForm" class="mb-4 flex space-x-2">
+        <input type="text" id="search_query" name="search_query" class="w-full p-3 border rounded-lg" placeholder="Enter search query" required>
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700">Search</button>
+    </form>
+    <div id="search_results" class="mt-4 text-gray-700"></div>
+
+    <!-- Filter Summaries -->
+    <h3 class="text-xl font-semibold mt-6">📂 Filter Summaries</h3>
+    <select id="sort_order" class="w-full p-2 border rounded-lg mt-2">
+        <option value="desc">Newest First</option>
+        <option value="asc">Oldest First</option>
+    </select>
+
+    <!-- Display User Summaries -->
+    <h3 class="text-xl font-semibold mt-6">📄 Your Summaries</h3>
+    <div id="summary_list" class="mt-4 space-y-4">
+        {% for summary in summaries %}
+            <div class="p-4 border rounded-lg shadow-sm bg-gray-50">
+                <p class="text-gray-800"><strong>Summary:</strong> {{ summary.text }}</p>
+                <p class="text-gray-500 text-sm mt-1"><strong>Category:</strong> {{ summary.category }}</p>
+            </div>
+        {% empty %}
+            <p class="text-gray-500">No summaries found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Load JavaScript File -->
+<script src="{% static 'js/dashboard.js' %}"></script>
+
+{% endblock %}
